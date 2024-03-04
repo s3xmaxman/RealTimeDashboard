@@ -9,7 +9,7 @@ type Error = {
 
 
 const customFetch =  async (url: string, options: RequestInit) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("access_token");
 
     const headers = options.headers as Record<string, string>;
 
@@ -17,14 +17,14 @@ const customFetch =  async (url: string, options: RequestInit) => {
         ...options,
         headers: {
             ...headers,
-            Authorization: headers.Authorization || `Bearer ${accessToken}`,
+            Authorization: headers?.Authorization || `Bearer ${accessToken}`,
             "Content-Type": "application/json",
             "Apollo-Require-Preflight": "true",
         }
     })
 };
 
-const getGraphQLError = (body: Record<"errors", GraphQLFormattedError[] | undefined>): Error | null => {
+const getGraphQLErrors = (body: Record<"errors", GraphQLFormattedError[] | undefined>): Error | null => {
     if(!body){
         return {
             message: "Unknown error",
@@ -55,7 +55,7 @@ export const fetchWrapper = async (url: string, options: RequestInit) => {
 
     const body = await responseClone.json();
 
-    const error = getGraphQLError(body);
+    const error = getGraphQLErrors(body);
 
     if(error){
         throw error;

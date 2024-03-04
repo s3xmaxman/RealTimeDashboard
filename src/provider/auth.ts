@@ -7,7 +7,6 @@ export const authCredentials = {
   email: "michael.scott@dundermifflin.com",
   password: "demodemo",
 };
-
 export const authProvider: AuthBindings = {
   login: async ({ email }) => {
     try {
