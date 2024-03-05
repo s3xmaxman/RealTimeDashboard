@@ -52,7 +52,7 @@ export const totalCountVariants: {
         />
       </IconWrapper>
     ),
-    title: "Number of companies",
+    title: "企業数",
     data: [
       {
         index: "1",
@@ -89,7 +89,7 @@ export const totalCountVariants: {
         />
       </IconWrapper>
     ),
-    title: "Number of contacts",
+    title: "コンタクトの数",
     data: [
       {
         index: "1",
@@ -130,7 +130,7 @@ export const totalCountVariants: {
         />
       </IconWrapper>
     ),
-    title: "Total deals in pipeline",
+    title: "パイプライン案件数",
     data: [
       {
         index: "1",
