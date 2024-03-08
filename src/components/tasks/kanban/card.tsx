@@ -4,11 +4,13 @@ import { TextIcon } from '@/components/text-icon'
 import { User } from '@/graphql/schema.types'
 import { getDateColor } from '@/utilities'
 import { ClockCircleOutlined, DeleteOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons'
+import { useDelete, useNavigation } from '@refinedev/core'
 import { Button, Card, ConfigProvider, Dropdown, Space, Tag, Tooltip, theme } from 'antd'
 import { MenuProps } from 'antd/lib'
 import dayjs from 'dayjs'
 
 import React, { memo, useMemo } from 'react'
+
 
 
 
@@ -28,9 +30,8 @@ type ProjectCardProps = {
 const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
   const { token } = theme.useToken()
 
-  const edit = () => {
-      
-  }
+  const { edit } = useNavigation()
+  const { mutate } = useDelete()
 
   const dropdownItems = useMemo(() => {
     const dropdownItems: MenuProps['items'] = [
@@ -38,7 +39,7 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
             label:'詳細',
             key: 1,
             icon: <EyeOutlined />,
-            onClick: () => { edit() }
+            onClick: () => { edit('tasks', id,'replace') }
         },
         {
             danger: true,
@@ -46,7 +47,13 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
             icon: <DeleteOutlined/>,
             key: 2,
             onClick: () => {
-                
+                mutate({
+                    resource: 'tasks',
+                    id,
+                    meta:{
+                        operation:'task'
+                    }
+                })
             }
         }
     ]
@@ -82,7 +89,7 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
         <Card
             size='small'
             title={<Text ellipsis={{ tooltip: title}}>{title}</Text>}
-            onClick={() => edit()}
+            onClick={() => edit( 'tasks', id, 'replace' )}
             extra={
                 <Dropdown
                     trigger={['click']}
