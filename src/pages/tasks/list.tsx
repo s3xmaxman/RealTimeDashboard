@@ -1,6 +1,9 @@
 
+import { ProjectCardSkeleton } from '@/components'
+import KanbanColumnSkeleton from '@/components/skeleton/kanban'
+import { KanbanItemAddCardButton } from '@/components/tasks/kanban/add-card-button'
 import { KanbanBoardContainer, KanbanBoard } from '@/components/tasks/kanban/board'
-import ProjectCard from '@/components/tasks/kanban/card'
+import ProjectCard, { ProjectCardMemo } from '@/components/tasks/kanban/card'
 import  KanbanColumn  from '@/components/tasks/kanban/column'
 import KanbanItem from '@/components/tasks/kanban/item'
 import { TASKS_QUERY, TASK_STAGES_QUERY } from '@/graphql/queries'
@@ -77,6 +80,10 @@ const List = () => {
       
   }
 
+  const isLoading = isLoadingStages || isLoadingTasks 
+
+  if(isLoading) return <PageSkeleton />
+
   return (
     <>
         <KanbanBoardContainer>
@@ -93,13 +100,36 @@ const List = () => {
                             id={task.id}
                             data={{...task, stageId: 'unassigned'}}
                         >
-                            <ProjectCard 
+                            <ProjectCardMemo
                                 {...task}
                                 dueDate={task.dueDate || undefined}
                             />
                         </KanbanItem>    
                     ))}
+                    {!taskStages?.unassignedStage?.length && (
+                        <KanbanItemAddCardButton
+                            onClick={() => handleAddCard({ stageId: 'unassigned' })}
+                        />
+                    )}
                 </KanbanColumn>
+                {taskStages.columns?.map((column) => (
+                    <KanbanColumn
+                        key={column.id}
+                        id={column.id}
+                        title={column.title}
+                        count={column.tasks.length}
+                        onAddClick={() => handleAddCard({ stageId: column.id })}
+                    >
+                        {!isLoading && column.tasks.map((task) => (
+                            <KanbanItem key={task.id} id={task.id} data={task}>
+                                <ProjectCardMemo
+                                    {...task}
+                                    dueDate={task.dueDate || undefined}
+                                />
+                            </KanbanItem>
+                        ))}
+                    </KanbanColumn>
+                ))}
             </KanbanBoard>
         </KanbanBoardContainer>
     </>
@@ -107,3 +137,20 @@ const List = () => {
 }
 
 export default List
+
+
+const PageSkeleton = () => {
+    const columCount = 6
+    const itemCount = 4
+    return (
+       <KanbanBoardContainer>
+           {Array.from({ length: columCount }).map((_, index) => (
+               <KanbanColumnSkeleton key={index} >
+                   {Array.from({ length: itemCount }).map((_, index) => (
+                       <ProjectCardSkeleton key={index} />
+                   ))}
+               </KanbanColumnSkeleton>
+           ))}
+       </KanbanBoardContainer>
+    )
+}
