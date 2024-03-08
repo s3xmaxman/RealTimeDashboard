@@ -89,7 +89,7 @@ export const totalCountVariants: {
         />
       </IconWrapper>
     ),
-    title: "コンタクトの数",
+    title: "コンタクト数",
     data: [
       {
         index: "1",

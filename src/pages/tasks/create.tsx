@@ -52,7 +52,7 @@ const TasksCreatePage = () => {
         // navigate to the list page of the tasks resource
         list("tasks", "replace");
       }}
-      title="Add new card"
+      title="タスクを作成"
       width={512}
     >
       <Form
@@ -69,7 +69,7 @@ const TasksCreatePage = () => {
           });
         }}
       >
-        <Form.Item label="Title" name="title" rules={[{ required: true }]}>
+        <Form.Item label="タイトル" name="title" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
       </Form>
